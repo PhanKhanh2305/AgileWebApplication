@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AgileWebApplication.Areas.Identity.Data;
 using AgileWebApplication.Models;
+using AgileWebApplication.Models.ViewModels;
 
 namespace AgileWebApplication.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        public int PageSize = 12;
 
         public ProductsController(ApplicationDbContext context)
         {
@@ -20,11 +22,75 @@ namespace AgileWebApplication.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(int productpage = 1)
         {
-            var applicationDbContext = _context.Products.Include(p => p.Category).Include(p => p.Gender);
-            return View(await applicationDbContext.ToListAsync());
+            return View(new ProductListViewModel
+            {
+                Products = _context.Products.Skip((productpage - 1) * PageSize).Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    ItemsPerPage = PageSize,
+                    CurrentPage = productpage,
+                    TotalItem = _context.Products.Count()
+                }
+
+            });
         }
+        [HttpPost]
+        public async Task<IActionResult> Search(string keywords, int productpage = 1)
+        {
+            return View("Index", new ProductListViewModel
+            {
+                Products = _context.Products
+                .Where(p => p.ProductName.Contains(keywords))
+                .Skip((productpage - 1) * PageSize).Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    ItemsPerPage = PageSize,
+                    CurrentPage = productpage,
+                    TotalItem = _context.Products.Count()
+                }
+
+            });
+        }
+        [HttpGet]
+        public async Task<IActionResult> ProductsByCat(int categoryId, int productpage = 1)
+        {
+            return View("Index", new ProductListViewModel
+            {
+                Products = _context.Products
+                .Where(p => p.CategoryId == categoryId)
+                .Include(p => p.Category)
+                .Skip((productpage - 1) * PageSize).Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    ItemsPerPage = PageSize,
+                    CurrentPage = productpage,
+                    TotalItem = _context.Products.Count()
+                }
+
+            });
+        }
+        [HttpGet]
+        public async Task<IActionResult> ProductsByGender(int genderId, int productpage = 1)
+        {
+            return View("Index", new ProductListViewModel
+            {
+                Products = _context.Products
+                .Where(p => p.GenderId == genderId)
+                .Include(p => p.Gender)
+                .Skip((productpage - 1) * PageSize).Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    ItemsPerPage = PageSize,
+                    CurrentPage = productpage,
+                    TotalItem = _context.Products.Count()
+                }
+
+            });
+        }
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -50,7 +116,7 @@ namespace AgileWebApplication.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "GenderName");
+            ViewData["StyleId"] = new SelectList(_context.Genders, "StyleId", "StyleName");
             return View();
         }
 
@@ -59,7 +125,7 @@ namespace AgileWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDescription,ProductPhoto,ProductPrice,BestSeller,CategoryId,GenderId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDescription,ProductPhoto,ProductPrice,BestSeller,CategoryId,StyleId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +134,7 @@ namespace AgileWebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "GenderName", product.GenderId);
+            ViewData["StyleId"] = new SelectList(_context.Genders, "StyleId", "StyleName", product.GenderId);
             return View(product);
         }
 
@@ -86,7 +152,7 @@ namespace AgileWebApplication.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "GenderName", product.GenderId);
+            ViewData["StyleId"] = new SelectList(_context.Genders, "StyleId", "StyleName", product.GenderId);
             return View(product);
         }
 
@@ -95,7 +161,7 @@ namespace AgileWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDescription,ProductPhoto,ProductPrice,BestSeller,CategoryId,GenderId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDescription,ProductPhoto,ProductPrice,BestSeller,CategoryId,StyleId")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -123,7 +189,7 @@ namespace AgileWebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "GenderName", product.GenderId);
+            ViewData["StyleId"] = new SelectList(_context.Genders, "StyleId", "StyleName", product.GenderId);
             return View(product);
         }
 

@@ -1,0 +1,20 @@
+﻿@model IEnumerable<AgileWebApplication.Models.Category>
+
+<div class="product-filter">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <div class="section-title">
+                <h2>Our Products</h2>
+            </div>
+            <ul class="product-controls">
+                <li data-filter="*">All</li>
+                @foreach(var item in Model)
+                {
+                    <li>
+                        <a href="/Products/ProductsByCat/?categoryId=@item.CategoryId">@item.CategoryName</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
