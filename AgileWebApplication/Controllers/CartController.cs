@@ -1,12 +1,15 @@
 ﻿using AgileWebApplication.Areas.Identity.Data;
 using AgileWebApplication.Infrastructure;
 using AgileWebApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgileWebApplication.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
+
         public Cart? Cart { get; set; }
         private readonly ApplicationDbContext _context;
         public CartController(ApplicationDbContext context)

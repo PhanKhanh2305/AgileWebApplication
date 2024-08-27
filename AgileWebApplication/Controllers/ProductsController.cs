@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using AgileWebApplication.Areas.Identity.Data;
 using AgileWebApplication.Models;
 using AgileWebApplication.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AgileWebApplication.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -93,6 +95,7 @@ namespace AgileWebApplication.Controllers
 
 
         // GET: Products/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
