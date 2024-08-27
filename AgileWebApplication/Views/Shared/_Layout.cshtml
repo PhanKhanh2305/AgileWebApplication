@@ -49,7 +49,7 @@
         <div class="container-fluid">
             <div class="inner-header">
                 <div class="logo">
-                    <a href="./index.html"><img src="/template/img/logo.png" alt=""></a>
+                    <a href="/Home/Index"><img src="/template/img/logo.png" alt=""></a>
                 </div>
                 <div class="header-right">
                     @* <img src="/template/img/icons/search.png" alt="" class="search-trigger">
@@ -64,20 +64,10 @@
                     <a href="#" class="in">Sign in</a> *@
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        if(User.IsInRole("Admin"))
-                        {
-                            <a class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage</a>
-                            <a class="in" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Admin", "Home", new { area = "" })">
-                                <button id="logout" type="submit" class="btn btn-link">Logout</button>
-                            </a>
-                        }
-                        else
-                        {
-                            <a class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage</a>
-                            <a class="in" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                <button id="logout" type="submit" class="btn btn-link">Logout</button>
-                            </a>
-                        }
+                        <a class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage</a>
+                        <a class="in" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button id="logout" type="submit" class="btn btn-link">Logout</button>
+                        </a>
                     }
                     else
                     {

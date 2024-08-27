@@ -1,5 +1,4 @@
 ﻿using AgileWebApplication.Areas.Identity.Data;
-using AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgileWebApplication.Components
