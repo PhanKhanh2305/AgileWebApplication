@@ -2,6 +2,7 @@ using AgileWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AgileWebApplication.Controllers
 {
@@ -18,8 +19,8 @@ namespace AgileWebApplication.Controllers
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        [Authorize (Roles=("Admin"))]
+        public IActionResult Admin()
         {
             return View();
         }

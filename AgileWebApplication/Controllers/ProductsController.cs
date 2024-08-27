@@ -116,6 +116,7 @@ namespace AgileWebApplication.Controllers
         }
 
         // GET: Products/Create
+        [Authorize (Roles =("Admin"))]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
@@ -128,6 +129,7 @@ namespace AgileWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDescription,ProductPhoto,ProductPrice,BestSeller,CategoryId,StyleId")] Product product)
         {
             if (ModelState.IsValid)
@@ -142,6 +144,7 @@ namespace AgileWebApplication.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -164,6 +167,7 @@ namespace AgileWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDescription,ProductPhoto,ProductPrice,BestSeller,CategoryId,StyleId")] Product product)
         {
             if (id != product.ProductId)
@@ -197,6 +201,7 @@ namespace AgileWebApplication.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -219,6 +224,7 @@ namespace AgileWebApplication.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);
